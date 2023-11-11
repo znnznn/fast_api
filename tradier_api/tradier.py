@@ -41,25 +41,6 @@ async def get_history_data_by_symbol(symbol: str, start_date: str, end_date: str
     return await get_tradier_response(url, params)
 
 
-def symbol_stocks_historical(symbol: str, start_date: str, end_date: str, interval: str) -> dict | bool:
-    date = "year, month, day, daily, weekly, monthly"
-    #url = f"https://api.tradier.com/v1/markets/quotes?symbols=aapl"
-    url = f'https://sandbox.tradier.com/v1/markets/history'
-    params = {'symbol': symbol, 'interval': interval, 'start': start_date, 'end': end_date}
-    headers = {"Accept": "application/json",
-               "Authorization": "Bearer 6ieiYLJ6rJGbWJWHXOivBDFYi7kR"}
-    response = requests.get(url, params=params, headers=headers)
-    resp = response.json()
-
-    if resp['history'] is None:
-        return False
-    return resp['history']['day']
-
-
-# if __name__ == '__main__':
-#     print(all_stocks())
-
-
 """ A	NYSE MKT
 B	NASDAQ OMX BX
 C.	Національна фондова біржа
