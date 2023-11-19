@@ -1,52 +1,170 @@
 {% extends 'main.html'  %}
 
 {% block title  %}
-    {{ title }}
+{{ title }}
 {% endblock %}
 
 {% block body  %}
 <body>
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li><h3 style="color:#dbff6d">{{ message }}</h3></li>
-        {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
-    <div class="skippy overflow-hidden">
-  <div class="container-xl">
-    <a class="sr-only sr-only-focusable d-inline-flex p-2 m-1" href="{{url_for('main_page')}}">Головна сторінка</a>
-  </div>
+<div class="skippy overflow-hidden">
+    <div class="container-xl">
+        <a class="sr-only sr-only-focusable d-inline-flex p-2 m-1" href="{{ url_for('main_page', page=1) }}">Головна сторінка</a>
     </div>
-    <body class="text-center">
-    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-  <header class="masthead mb-auto">
-    <div class="inner">
-      <h3 class="masthead-brand">Біржовий аналітик</h3>
-    </div>
-  </header>
+</div>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Біржовий аналітик</h3>
+        </div>
+    </header>
 
 
-  <main role="main" class="inner cover" style="color:#00FF00">
-    <h1 class="cover-heading">Майбутнє твоїх фінансів тут</h1>
-    <p class="lead">Не прогав можливість вигідно інвестувати власні кошти</p>
-    <p class="lead">
-      <a href="{{url_for('login_page')}}" class="btn btn-lg btn-secondary">Торгівля</a>
-    </p>
+    <main role="main" class="inner cover" style="color:#00FF00">
+        <h1 class="cover-heading">Майбутнє твоїх фінансів тут</h1>
+        <p class="lead">Не прогав можливість вигідно інвестувати власні кошти</p>
 
-  </main>
+    </main>
 
-  <footer class="mastfoot mt-auto">
-    <div class="inner">
-      <p>Книга скарг і пропозицій <a href="{{url_for('contacts_page')}}" style="color:#FFF5EE">email</a>.</p>
-    </div>
-  </footer>
+    <footer class="mastfoot mt-auto">
+    </footer>
 </div>
 
 <h3 class="lead" style="color:#FFF5EE">Люди без інвестицій заробляють кошти, щоб витрачати </h3>
-    <h3 class="lead" style="color:#FFF5EE"> Люди з інвестиціями витрачатють кошти, щоб заробляти</h3>
-    <h2 class="cover-heading" style="color:#FFF5EE"> Досить бути заробітчанином - стань  І Н В Е С Т О Р О М !</h2>
-    <h2 class="lead" style="color:#FFF5EE">Безкоштовний сервіс керування власними інвестиціями в цінні папери.</h2>
+<h3 class="lead" style="color:#FFF5EE"> Люди з інвестиціями витрачатють кошти, щоб заробляти</h3>
+<h2 class="cover-heading" style="color:#FFF5EE"> Досить бути заробітчанином - стань  І Н В Е С Т О Р О М !</h2>
+<h2 class="lead" style="color:#FFF5EE">Безкоштовний сервіс керування власними інвестиціями в цінні папери.</h2>
+</div>
+<table class="table table thead-light th table-hover table-accent-bg">
+			<thead>
+				<tr bgcolor="#007bff" style="color:#fff">
+
+                   {% for key in data['stocks'][0].keys() %}
+                        {% if key == 'quote' %}
+
+                            <th>Ціна відкриття сьогодні</th>
+                            <th>Найвища ціна сьогодні</th>
+                            <th>Найнижча ціна сьогодні</th>
+                            <th>Ціна закриття сьогодні</th>
+                            <th>Ціна закупки зараз</th>
+                            <th>Зміна у відсотках</th>
+                            <th>Остання ціна закриття</th>
+                        {% elif key == "symbol" %}
+                            <th>Символ паперу</th>
+                        {% elif key == "exchange" %}
+                            <th>Біржа</th>
+                        {% elif key == "type" %}
+                            <th>Тип паперу</th>
+                        {% elif key == "description" %}
+                            <th>Емітент цінних паперів</th>
+                        {% elif key != 'positive_change' %}
+                           <th>{{ key }}</th>
+                        {% endif %}
+					{% endfor %}
+                   <th>
+                    <button  formmethod="post" class="btn" type="submit">Стежити</button>
+                    </th>
+				</tr>
+			</thead>
+			<tbody>
+
+                {% for value in data['stocks'] %}
+                    {% if value['positive_change'] %}
+                        <tr bgcolor="#1de04e" style="color:#fff">
+                                {% for key, val in value.items() %}
+                                    {% if key == 'quote' %}
+                                        {% for key, symbol in val.items() %}
+                                            {% if key == 'prevclose' %}
+                                                <td>{{ symbol }}</td>
+                                            {% elif key == 'open' %}
+                                                <td>{{ symbol }}</td>
+                                            {% elif key == 'high' %}
+                                                <td>{{ symbol }}</td>
+                                            {% elif key == 'low' %}
+                                                <td>{{ symbol }}</td>
+                                            {% elif key == 'close' %}
+                                                {% if symbol == None %}
+                                                    <td>Ринок відкритий</td>
+                                                {% else %}
+                                                    <td>{{ symbol }}</td>
+                                                {% endif %}
+                                            {% elif key == 'ask' %}
+                                                <td>{{ symbol }}</td>
+                                            {% elif key == 'change_percentage' %}
+                                                <td>{{ symbol }} ↑</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% elif key == "symbol" %}
+                                       <td><li class="list-inline-item"><a href="{{url_for('schedule', stock=val)}}" data-toggle="tooltip" title="schedule" style="color:#fff"><h4>{{ val }}</h4></a></li></td>
+                                    {% elif key != 'positive_change' %}
+                                        <td>{{ val }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            <td><form id="click-green" action="{{ url_for('user_list') }}" method="post" ><input type="hidden" name="stock" value="{{ value }}"><button formmethod="post" class="btn btn-primary"  type="submit" onclick="">Купити</button></form></td>
+                    {% else %}
+                         <tr bgcolor="#ff8080" style="color:#fff">
+                                    {% for key, val in value.items() %}
+                                        {% if key == 'quote' %}
+                                            {% for key, symbol in val.items() %}
+                                                {% if key == 'prevclose' %}
+                                                    <td>{{ symbol }}</td>
+                                                {% elif key == 'open' %}
+                                                    <td>{{ symbol }}</td>
+                                                {% elif key == 'high' %}
+                                                    <td>{{ symbol }}</td>
+                                                {% elif key == 'low' %}
+                                                    <td>{{ symbol }}</td>
+                                                {% elif key == 'close' %}
+                                                    {% if symbol == None %}
+                                                        <td>Ринок відкритий</td>
+                                                    {% else %}
+                                                        <td>{{ symbol }}</td>
+                                                    {% endif %}
+                                                {% elif key == 'ask' %}
+                                                    <td>{{ symbol }}</td>
+                                                {% elif key == 'change_percentage' %}
+                                                    <td>{{ symbol }} ↓</td>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% elif key == "symbol" %}
+                                       <td><li class="list-inline-item"><a href="{{url_for('schedule', stock=val)}}" data-toggle="tooltip" title="schedule" style="color:#fff"><h4>{{ val }}</h4></a></li></td>
+                                        {% elif key != 'positive_change' %}
+                                            <td>{{ val }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                <td> <form action="{{ url_for('user_list') }}" method="post" id="click-red"><input type="hidden" name="stock" value="{{ value }}"><button formmethod="post" class="btn btn-primary"  type="submit" onclick="">Купити</button></form></td>
+                            </tr>
+                    {% endif %}
+                {% endfor %}
+
+			</tbody>
+		</table>
+<nav aria-label="page">
+  <ul class="pagination" style="opacity:0.6">
+      {% if data['page'] %}
+      {% if data['page']['page_1'] == 1 %}
+        <li class="page-item disabled">
+          <span class="page-link">Previous</span>
+        </li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="{{ data['page']['prev_page'] }}">Previous</a></li>
+      {% endif %}
+
+    <li class="page-item active" aria-current="page">
+      <span class="page-link">{{ data['page']['page_1'] }}</span>
+    </li>
+     <li class="page-item"><a class="page-link" href="{{ data['page']['page_2'] }}">{{ data['page']['page_2'] }}</a></li>
+    <li class="page-item"><a class="page-link" href="{{ data['page']['page_3'] }}">{{ data['page']['page_3'] }}</a></li>
+    {% if data['page']['next_page'] <= data['page']['pages'] %}
+        <li class="page-item"><a class="page-link" href="{{ data['page']['next_page'] }}">Next</a></li>
+    {% else %}
+        <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+    {% else %}
+       <li class="page-item disabled"><a class="page-link" href="{{ data['page']['prev_page'] }}">Previous</a></li>
+       <li class="page-item"><a class="page-link">1</a></li>
+       <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
 {% endblock %}
