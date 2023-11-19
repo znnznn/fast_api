@@ -41,6 +41,34 @@ async def get_history_data_by_symbol(symbol: str, start_date: str, end_date: str
     return await get_tradier_response(url, params)
 
 
+async def get_list_of_stocks(page: int = 1, amount_stock: int = 10) -> dict:
+    count_page = 3
+    if amount_stock < 1:
+        amount_stock = 10
+    with open('tradier_api/stocks_all.json', 'r') as file_stocks:
+        list_data = json.load(file_stocks)
+        stocks = list_data['securities']['security']
+        stocks = sorted(stocks, key=lambda symbol: symbol['symbol'])
+        pages = round(len(stocks) // amount_stock)
+        pages = pages if len(stocks) % amount_stock == 0 else pages + 1
+    if page > pages:
+        page = pages
+    elif page < 1:
+        page = 1
+    show_page = {
+        'prev_page': page - 1,
+        'page_1': page,
+        'page_2': page + 1,
+        'page_3': page + 2,
+        'next_page': page + count_page,
+        'pages': pages
+    }
+    return {
+        'stocks': stocks[page * amount_stock: (page + 1) * amount_stock],
+        'page': show_page
+    }
+
+
 """ A	NYSE MKT
 B	NASDAQ OMX BX
 C.	Національна фондова біржа
