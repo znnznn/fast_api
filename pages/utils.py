@@ -1,3 +1,8 @@
+from sqlalchemy import insert
+from users.models import message
+from users.schemas import ContactUs
+
+
 class AsyncIterator:
     def __init__(self, data):
         self.data = data
@@ -23,3 +28,10 @@ async def get_show_page_for_template(page: int, count_page: int, max_page: int):
         'next_page': page + count_page,
         'pages': max_page
     }
+
+
+async def insert_message_to_db(new_message: ContactUs, session):
+    stmt = insert(message).values(**new_message.model_dump())
+    await session.execute(stmt)
+    await session.commit()
+    return {"message": "inserted"}
