@@ -17,3 +17,15 @@ user = Table(
     Column("is_superuser", Boolean, default=False),
     Column("is_verified", Boolean, default=False),
 )
+
+message = Table(
+    "message",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("username", String),
+    Column("message", String),
+    Column("created_at", TIMESTAMP, default=datetime.utcnow()),
+    Column("email", String),
+    Column("is_read", Boolean, default=False),
+
+)

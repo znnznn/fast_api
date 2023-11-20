@@ -10,7 +10,6 @@
     <body class="text-center">
     <ul class="list-inline" style="color:#BDB76B">
         <h3> {{ title }} </h3>
-        {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul class=flashes>
             {% for message in messages %}
@@ -18,7 +17,6 @@
             {% endfor %}
         </ul>
         {% endif %}
-        {% endwith %}
     </ul>
     <form class="form-signin" style="color:#BDB76B">
         <img class="mb-4" >
@@ -31,7 +29,10 @@
         <div class="text-center">
             <br>
             <label>
-                <textarea class="form-control" name="message" rows="7" cols="120" required="" placeholder="Введіть текст повідомлення i ми обов'язково Вам надішлемо відповідь" autofocus=""></textarea>
+                <textarea class="form-control" name="message" rows="7" cols="120" required=""
+                          placeholder="Введіть текст повідомлення i ми обов'язково Вам надішлемо відповідь" autofocus="">
+
+                </textarea>
             </label>
 
         </div>
