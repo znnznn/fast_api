@@ -1,0 +1,146 @@
+{% extends 'main.html'  %}
+
+{% block title  %}
+{{ title }}
+{% endblock %}
+
+{% block body  %}
+<div class="container-xl">
+    <form class="form-inline mt-2 mt-md-0" id="search" action="{{ url_for('search') }}" method="post">
+        {% if stock %}
+        <input class="form-control mr-sm-2" name="symbol" value="{{ stock }}" type="text" placeholder="" aria-label="{{ stock }}" required="">
+        {% else %}
+        <input class="form-control mr-sm-2" name="symbol" value="" type="text" placeholder="Пошук" aria-label="Пошук" required="">
+        {% endif %}
+        <label><select class="custom-select" name="period" id="inputGroupSelect01" form="search" required="">
+            {% if interval == "huge" %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option selected value="huge">Huge</option>
+            {% elif interval == "xxlarge" %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option selected value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% elif interval == "xlarge" %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option selected value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% elif interval == "small" %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option selected value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% elif interval == "medium" %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option selected value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% elif interval == "large" %}
+            <option value="icon">Icon</option>
+            <option selected value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% elif interval == "icon" %}
+            <option selected value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% else %}
+            <option value="icon">Icon</option>
+            <option value="large">Large</option>
+            <option value="medium">Medium</option>
+            <option value="small">Small</option>
+            <option value="xlarge">Xlarge</option>
+            <option value="xxlarge">Xxlarge</option>
+            <option value="huge">Huge</option>
+            {% endif %}
+        </select></label>
+        <label><select class="custom-select" name="type" id="inputGroupSelect02" form="search" required="">
+            {% if type_sch == "clipart" %}
+            <option selected value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% elif type_sch == "face" %}
+            <option value="clipart">Clipart</option>
+            <option selected value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% elif type_sch == "lineart" %}
+            <option value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option selected value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% elif type_sch == "stock" %}
+            <option value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option selected value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% elif type_sch == "photo" %}
+            <option value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option selected value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% elif type_sch == "animated" %}
+            <option value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option selected value="animated">Animated</option>
+            {% else %}
+            <option value="clipart">Clipart</option>
+            <option value="face">Face</option>
+            <option value="lineart">lineart</option>
+            <option value="stock">Stock</option>
+            <option value="photo">Photo</option>
+            <option value="animated">Animated</option>
+            {% endif %}
+        </select></label>
+        <button form="search" class="btn btn-outline-success my-2 my-sm-0" type="submit" formmethod="post">Пошук</button>
+    </form>
+
+    <body class="text-center">
+    {% if api_response %}
+    {% for items in api_response %}
+    <img src="{{ items['link'] }}" width="{{ items['image']['width'] }}" height="{{ items['image']['height'] }}" alt="{{ stock }}">
+    <h1 style="color:red">{{ item['htmlTitle'] }}</h1>
+    {% endfor %}
+    {% endif %}
+    </body>
+</div>
+{% endblock %}

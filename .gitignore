@@ -186,3 +186,4 @@ archive.zip
 
 # macOS
 .DS_Store
+/logo-api-key.json

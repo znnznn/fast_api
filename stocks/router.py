@@ -64,4 +64,3 @@ async def get_stocks(page: int = 1, amount_stock: int = 10):
         'results': qs_stocks,
         'show_page': await get_show_page_for_template(page, count_page, pages),
     }
-
