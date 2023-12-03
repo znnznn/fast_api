@@ -20,6 +20,8 @@ jobs:
           full_text: |
             SECRET_KEY=${{ secrets.SECRET_KEY }}
             TRADIER_TOKEN=${{ secrets.TRADIER_TOKEN }}
+            GOOGLE_API_DEVELOPER_KEY=${{ secrets.TRADIER_TOKEN }}
+            GOOGLE_API_CX=${{ secrets.TRADIER_TOKEN }}
           directory: ${{ github.workspace }}
       - name: Stop containers
         run: docker-compose stop
