@@ -10,4 +10,7 @@ DB_NAME = config("DB_NAME", cast=str, default="stock")
 
 TRADIER_TOKEN = config("TRADIER_TOKEN", cast=str)
 
+GOOGLE_API_DEVELOPER_KEY = config("GOOGLE_API_DEVELOPER_KEY", cast=str)
+GOOGLE_API_CX = config("GOOGLE_API_CX", cast=str)
+
 

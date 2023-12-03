@@ -137,7 +137,7 @@
     {% if api_response %}
     {% for item in api_response %}
     <img src="{{ item['link'] }}" width="{{ item['image']['width'] }}" height="{{ item['image']['height'] }}" alt="{{ stock }}">
-    <h1 style="color:red">{{ item['htmlTitle'] }}</h1>
+    <h5 style="color:red">{{ item['htmlTitle'] }}</h5>
     {% endfor %}
     {% endif %}
     </body>
