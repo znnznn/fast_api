@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.responses import RedirectResponse
 
 from database import User, get_async_session
+from google_api.services import get_list_images
 from pages.utils import AsyncIterator, insert_message_to_db
 from tradier_api.tradier import get_list_of_stocks, get_stock_data
 from users.mixins import current_user
@@ -53,3 +54,31 @@ async def contact_us(request: Request, session: AsyncSession = Depends(get_async
 @router.get("/contact/us")
 async def contact_us(request: Request):
     return templates.TemplateResponse('contacts.html', {"request": request,})
+
+
+@router.post("/search/images")
+async def search(request: Request):
+    form = await request.form()
+    print(form)
+    api_response = get_list_images(form)
+    print(api_response)
+    return templates.TemplateResponse('search_image.html', {"request": request, 'api_response': api_response.get("items", [])})
+
+
+@router.get("/search/images")
+async def search(request: Request, input_text="butterfly"):
+    return templates.TemplateResponse('search_image.html', {"request": request})
+
+
+@router.post("/search/image")
+async def search_s(request: Request):
+    form = await request.form()
+    print(form)
+    api_response = get_list_images(form)
+    print(api_response)
+    return templates.TemplateResponse('fsfs.html', {"request": request, 'api_response': api_response.get("items", [])})
+
+
+@router.get("/search/image")
+async def search_s(request: Request):
+    return templates.TemplateResponse('fsfs.html', {"request": request})

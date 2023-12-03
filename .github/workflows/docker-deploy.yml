@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "production" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: GITHUB_WORKSPACE
+        run: echo "$GITHUB_WORKSPACE"
+      - name: Create .env
+        uses: DeveloperRic/action-create-env@v1.0.2
+        with:
+          full_text: |
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            TRADIER_TOKEN=${{ secrets.TRADIER_TOKEN }}
+          directory: ${{ github.workspace }}
+      - name: Stop containers
+        run: docker-compose stop
+      - name: Build the Docker image
+        run: docker-compose -f docker-compose-prod.yaml build
+      - name: Run containers
+        run: docker-compose -f docker-compose-prod.yaml up -d
+      - name: Run exist containers
+        if: ${{ failure() }}
+        run: docker-compose -f docker-compose-prod.yaml up -d
+      - name: Remove not used images and volumes (clean up file system in AWS)
+        if: ${{ success() }}
+        run: docker system prune -f -a --volumes
